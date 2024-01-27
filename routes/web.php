@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Calendar;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\CalendarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::resource('calendars', CalendarController::class);
 
 Route::get('/', function () {
     return view('app');
@@ -28,5 +29,5 @@ Route::get('/management', function () {
 })->name('app_management');
 
 Route::get('/test', function () {
-    dd ( Calendar::find(1) );
-});
+   return view('test');
+})->name('app_test');

@@ -15,9 +15,7 @@ class CreateCalendarsTable extends Migration
     {
         Schema::create('calendars', function (Blueprint $table) {
             $table->id();
-            $table->text('nom');
-            $table->text('cal1');
-            $table->text('cal2');
+            $table->string('nom');
             $table->timestamps();
         });
     }

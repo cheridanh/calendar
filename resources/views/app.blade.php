@@ -6,38 +6,38 @@
 
 @section('content')
 
-    <div class="text-center bg-body-tertiary p-4 rounded">
+    <form method="POST" action="{{ route('calendars.store') }}">
+        @csrf
 
-        <h1 class="p-4">{{ config('app.name') . ' !' }}</h1>
+        <div class="text-center bg-body-tertiary p-4 rounded">
 
-        <div class="text-center py-4">
+            <h1 class="p-4">{{ config('app.name') . ' !' }}</h1>
 
-            <label for="name" class="form-label lead">Nom</label>
-            <div class="input-group mb-3 w-75 m-auto">
-                <span class="input-group-text" id="name">@</span>
-                <input type="text" class="form-control" placeholder="Votre nom" aria-label="name" aria-describedby="name">
+            <div class="text-center py-4">
+
+                <label for="nom" class="form-label lead">Nom</label>
+                <div class="input-group mb-3 w-75 m-auto">
+                    <span class="input-group-text">@</span>
+                    <input type="text" id="nom" name="nom" class="form-control" placeholder="Votre nom" aria-label="name" aria-describedby="name">
+                </div>
+
+                <label for="link1" class="form-label lead">Calendrier 1</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">#</span>
+                    <input type="text" id="link1" name="link1" class="form-control" placeholder="https://monpremierliendecalenedrier" aria-label="link" aria-describedby="seconLink">
+                </div>
+
+                <label for="link2" class="form-label lead">Calendrier 2</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">#</span>
+                    <input type="text" id="link2" name="link2" class="form-control" placeholder="https://monsecondliendecalenedrier" aria-label="link" aria-describedby="seconLink">
+                </div>
+
+                <input class="btn btn-lg btn-primary btn-block m-4" type="submit" name="submit" value="Fusioner" />
+
             </div>
-
-            <label for="seconLink" class="form-label lead">Calendrier 1</label>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="seconLink">#</span>
-                <input type="text" class="form-control" placeholder="https://monpremierliendecalenedrier" aria-label="seconLink" aria-describedby="seconLink">
-            </div>
-
-            <label for="seconLink" class="form-label lead">Calendrier 2</label>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="seconLink">#</span>
-                <input type="text" class="form-control" placeholder="https://monsecondliendecalenedrier" aria-label="seconLink" aria-describedby="seconLink">
-            </div>
-
-            <p class="m-4">
-                <a class="btn btn-lg btn-primary btn-block" href="{{ route('app_confirm') }}" role="button">Fusioner</a>
-            </p>
-
-            <!-- <button class="btn btn-lg btn-primary btn-block" type="submit"><a href="./confirm">Envoyer</a></button> */ -->
 
         </div>
-
-    </div>
+    </form>
 
 @endsection

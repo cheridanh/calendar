@@ -13,14 +13,14 @@
 
     @if(! Route::is('app_home'))
         <header class="container d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-            <h1 href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                <span class="fs-4 text-muted">{{ config('app.name') }}</span>
-            </h1>
-
             @if(Route::is('app_management'))
-                <ul class="nav nav-pills">
-                    <li class="nav-item"><a href="{{ route('app_home') }}" class="nav-link" aria-current="page">Accueil</a></li>
-                </ul>
+                <h1 href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                    <a href="{{ route('app_home') }}" class="nav-link" aria-current="page">{{ config('app.name') }}</a>
+                </h1>
+            @else
+                <h1 href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                    {{ config('app.name') }}
+                </h1>
             @endif
         </header>
     @endif
