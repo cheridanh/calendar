@@ -1,10 +1,12 @@
+
+******************Controller Calendar**************************
 <?php
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CalendarFormRequest;
+use App\Http\Requests\CalendarRequest;
 use App\Models\Calendar;
-use App\Models\CalendarLink;
+use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {
@@ -35,41 +37,35 @@ class CalendarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CalendarFormRequest $request)
+    public function store(CalendarRequest $request)
     {
-        $calendar = Calendar::create([
+        Calendar::create([
             'name' => $request->name,
+            'link1' => $request->link1,
+            'link2' => $request->link2,
         ]);
-
-        $links = [];
-
-        foreach ($request->url as $url) {
-            $links[] = new CalendarLink(['url' => $url]);
-        }
-
-        $calendar->links()->saveMany($links);
-
-        return redirect()->route('calendars.sended', $calendar);
+        return redirect()->route('calendars.show');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Calendar  $calendar
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Calendar $calendar)
+    public function show(CalendarRequest $calendar)
     {
-        return view('calendars.show', compact('calendar'));
+        dd('show');
+        // return view('calendars.show', compact('calendar'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Calendar  $calendar
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Calendar $calendar)
+    public function edit($id)
     {
         //
     }
@@ -78,10 +74,10 @@ class CalendarController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Calendar  $calendar
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CalendarFormRequest $request, Calendar $calendar)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -89,10 +85,10 @@ class CalendarController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Calendar  $calendar
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Calendar $calendar)
+    public function destroy($id)
     {
         //
     }

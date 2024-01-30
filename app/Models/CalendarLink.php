@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CalendarLink extends Model
 {
     use HasFactory;
+    protected $fillable = ['url'];
 
     public function calendars() : BelongsTo
     {

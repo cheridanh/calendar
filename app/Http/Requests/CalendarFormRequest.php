@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CalendarRequest extends FormRequest
+class CalendarFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +24,18 @@ class CalendarRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => 'required',
-            'link1' => 'required|url',
-            'link2' => 'required|url',
+            'name' => 'required',
+            'url' => 'required|array',
+            'url.*' => 'required|url',
         ];
     }
 
     public function messages()
     {
         return [
-          'nom.required' => 'Un nom est requis !',
-          'link1.required' => 'Un lien de calendrier est requis !',
-          'link2.required' => 'Un lien de calendrier est requis !',
+            'name.required' => 'Un nom de calendrier est requis !',
+            'url.required' => 'Un lien de calendrier est requis !',
+            'url.url' => "Ceci n'est pas un lien",
         ];
     }
 }

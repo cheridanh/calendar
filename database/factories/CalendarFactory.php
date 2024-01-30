@@ -14,7 +14,7 @@ class CalendarFactory extends Factory
     public function definition()
     {
         return [
-            'nom' => $this->faker->name(),
+            'name' => $this->faker->name(),
         ];
     }
 }

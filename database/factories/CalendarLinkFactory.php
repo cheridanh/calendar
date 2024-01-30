@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Calendar;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CalendarLinkFactory extends Factory
@@ -14,8 +15,8 @@ class CalendarLinkFactory extends Factory
     public function definition()
     {
         return [
-            'lnk1' => $this->faker->unique()->url(),
-            'link2' => $this->faker->unique()->url(),
+            'url' => $this->faker->unique()->url(),
+            'calendar_id' => Calendar::factory(),
         ];
     }
 }

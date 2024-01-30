@@ -15,14 +15,8 @@ class CalendarSeeder extends Seeder
      */
     public function run()
     {
-        $calendar = Calendar::factory()
-            ->count(10)
-            ->has(CalendarLink::factory()->count(2))
-            ->create();
-
-        CalendarLink::factory()
-            ->count(2)
-            ->for($calendar)
+        $calendar = Calendar::factory()->count(5)
+            ->has(CalendarLink::factory()->count(2), 'links')
             ->create();
     }
 }

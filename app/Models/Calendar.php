@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Calendar extends Model
 {
     use HasFactory;
+    protected $fillable = ['name'];
 
     public function links() : HasMany
     {

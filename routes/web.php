@@ -13,21 +13,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function() {
+    return redirect()->route('calendars.index');
+});
 
 Route::resource('calendars', CalendarController::class);
-
-Route::get('/', function () {
-    return view('app');
-})->name('app_home');
-
-Route::get('/confirm', function () {
-    return view('confirm');
-})->name('app_confirm');
-
-Route::get('/management', function () {
-   return view('management');
-})->name('app_management');
-
-Route::get('/test', function () {
-   return view('test');
-})->name('app_test');
