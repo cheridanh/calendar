@@ -8,6 +8,22 @@ use App\Models\CalendarLink;
 
 class CalendarController extends Controller
 {
+    /*public function home()
+    {
+        return redirect()->route('calendars.index');
+
+        $getNumber = "";
+
+        if(isset($_POST['Commencer'])) {
+            if (!empty($_POST['numberLinks'])) {
+                $getNumber = $_POST['numberLinks'];
+                return redirect()->route('calendars.create', co mpact($getNumber));
+            } else {
+                return redirect()->route('calendars.index');
+            }
+        }
+    }*/
+
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +42,7 @@ class CalendarController extends Controller
      */
     public function create()
     {
-        return view('calendars.index');
+        return view('calendars.create');
     }
 
     /**
@@ -49,7 +65,9 @@ class CalendarController extends Controller
 
         $calendar->links()->saveMany($links);
 
-        return redirect()->route('calendars.sended', $calendar);
+        flash('Vos '. $calendar->links->count() . ' liens envoyés avec succès !');
+
+            return redirect()->route('calendars.show', $calendar);
     }
 
     /**
@@ -60,7 +78,16 @@ class CalendarController extends Controller
      */
     public function show(Calendar $calendar)
     {
-        return view('calendars.show', compact('calendar'));
+        foreach ($calendar->links as $link) {
+            $read = file_get_contents($link->url);
+
+            $file = fopen($read,"r");
+            while (!feof($file)) {
+                echo fgets($file) . "<br/>";
+            }
+            fclose($file);
+        }
+        // return view('calendars.show', compact('calendar'));
     }
 
     /**
@@ -71,7 +98,7 @@ class CalendarController extends Controller
      */
     public function edit(Calendar $calendar)
     {
-        //
+        dd('edit');
     }
 
     /**

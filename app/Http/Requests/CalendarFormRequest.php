@@ -25,8 +25,8 @@ class CalendarFormRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'url' => 'required|array',
-            'url.*' => 'required|url',
+            'url' => 'required|array|min:2',
+            'url.*' => 'url',
         ];
     }
 

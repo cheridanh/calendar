@@ -2,52 +2,31 @@
 
 @section('title', 'Bienvenue | ' . config('app.name'))
 
-@push('stylesheet', '/app.css')
-
 @section('content')
 
-    <form method="POST" action="{{ route('calendars.store') }}">
-        @csrf
+    <h1 class="mb-5 text-body-emphasis">Bienvenue sur " {{ config('app.name') }} "</h1>
 
-        <div class="text-center bg-body-tertiary p-4 rounded">
+    <hr>
 
-            <h1 class="p-4">{{ config('app.name') . ' !' }}</h1>
+    <p class="col-lg-8 mx-auto fs-5">
+        Pour commencer, dites nous combien de lien voulez-vous fusionner ?
+    </p>
 
-            <div class="text-center py-4">
+    <form method="GET" action="{{ route('calendars.create') }}" class="align-content-center text-center bg-body-tertiary p-4 rounded mx-auto">
 
-                <label for="name" class="form-label lead">Nom de calendrier</label>
-                <div class="input-group w-75 m-auto">
-                    <span class="input-group-text">@</span>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="Nom "
-                           aria-label="name" aria-describedby="name">
-                </div>
-                {!! $errors->first('name', '<span class="col-lg-8 mx-auto fs-5" style="color: red">:message</span>') !!}
-                <br>
-                <label for="url" class="form-label lead">Calendrier 1</label>
-                <br>
-                <div class="input-group">
-                    <span class="input-group-text">#</span>
-                    <input type="text" id="url" name="url[]" class="form-control"
-                           placeholder="https://monpremierliendecalenedrier" aria-label="url"
-                           aria-describedby="link1"><br>
-                </div>
-                {!! $errors->first('url', '<span class="col-lg-8 mx-auto fs-5" style="color: red">:message</span>') !!}
-                <br>
-                <label for="url" class="form-label lead">Calendrier 2</label>
-                <div class="input-group">
-                    <span class="input-group-text">#</span>
-                    <input type="text" id="url" name="url[]" class="form-control"
-                           placeholder="https://monsecondliendecalenedrier" aria-label="url"
-                           aria-describedby="url">
-                </div>
-                {!! $errors->first('url', '<span class="col-lg-8 mx-auto fs-5" style="color: red">:message</span>') !!}
-                <br>
-                <input class="btn btn-lg btn-primary btn-block m-4" type="submit" name="submit" value="Fusioner"/>
+        <div class="form-floating mx-auto">
+            <select name="numberLinks" class="form-select mx-auto" id="floatingSelect" aria-label="Floating label select example">
 
-            </div>
-
+                <option selected value="">Choisir un nombre</option>
+                @for($i = 2; $i <= 10; $i++)
+                    <option value="numberLinks">{{ $i }}</option>
+                @endfor
+            </select>
+            <label for="numberLinks">Nombre de liens</label>
         </div>
+
+        <input class="btn btn-lg btn-primary btn-block mb-0 mt-4" type="submit" name="Commencer" value="Commencer"/>
+
     </form>
 
 @endsection
-

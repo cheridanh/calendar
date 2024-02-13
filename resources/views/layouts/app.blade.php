@@ -25,12 +25,22 @@
         </header>
     @endif
 
-    <main class="container">
+    <main class="container my-5">
+        <div class="p-5 text-center bg-body-tertiary rounded-3">
+
+        @if( Session::has('notification.message') )
+            <div class="container alert alert-{{ Session::get('notification.type') }}" role="alert">
+                {{ Session::get('notification.message') }}
+            </div>
+        @endif
+
         @yield('content')
+
+        </div>
     </main>
 
     <footer class="footer text-center">
-        <p class="m-3">
+        <p>
             &copy; {{ date("Y") }} ITIC Paris.
         </p>
     </footer>
