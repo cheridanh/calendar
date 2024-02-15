@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CalendarFormRequest;
 use App\Models\Calendar;
 use App\Models\CalendarLink;
+use Illuminate\Support\Facades\Storage;
 
 class CalendarController extends Controller
 {
@@ -74,18 +75,39 @@ class CalendarController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Calendar  $calendar
-     * @return \Illuminate\Http\Response
+     * @return int
      */
     public function show(Calendar $calendar)
     {
         foreach ($calendar->links as $link) {
-            $read = file_get_contents($link->url);
 
-            $file = fopen($read,"r");
-            while (!feof($file)) {
-                echo fgets($file) . "<br/>";
+            $curentline = 0;
+            $linesearch = "BEGIN:VCALENDAR";
+
+            $content = file_get_contents($link->url);
+            Storage::put('calendar', $content);
+
+            $file = fopen(storage_path('app/calendar'), 'r+');
+
+            function removeLine($file, $remove)
+            {
+                $remove = "BEGIN:VCALENDAR ";
+                $lines = file($file, FILE_IGNORE_NEW_LINES);
+
+                foreach ($lines as $key => $lines)
+                {
+                    if ($lines == $remove) unset($lines[$key]);
+                }
+                $data = implode(PHP_EOL, $lines);
+                file_put_contents($file, $data);
+
+                echo $data;
             }
-            fclose($file);
+//
+//            while (!feof($file)) {
+//                echo fgets($file) . "<br/>";
+//            }
+//            fclose($file);
         }
         // return view('calendars.show', compact('calendar'));
     }
