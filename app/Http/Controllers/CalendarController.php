@@ -81,9 +81,6 @@ class CalendarController extends Controller
     {
         foreach ($calendar->links as $link) {
 
-            $curentline = 0;
-            $linesearch = "BEGIN:VCALENDAR";
-
             $content = file_get_contents($link->url);
             Storage::put('calendar', $content);
 
@@ -91,17 +88,14 @@ class CalendarController extends Controller
 
             function removeLine($file, $remove)
             {
-                $remove = "BEGIN:VCALENDAR ";
-                $lines = file($file, FILE_IGNORE_NEW_LINES);
-
-                foreach ($lines as $key => $lines)
-                {
-                    if ($lines == $remove) unset($lines[$key]);
-                }
-                $data = implode(PHP_EOL, $lines);
-                file_put_contents($file, $data);
-
-                echo $data;
+                $lines = file(storage_path('app/calendar'), FILE_IGNORE_NEW_LINES);
+                $remove = "BEGIN:VCALENDAR";
+                foreach($lines as $key => $line)
+                    if(stristr($line, $remove)) unset($lines[$key]);
+                $data = implode('\n', array_values($lines));
+                $file = fopen(storage_path('app/calendar'));
+                fwrite($file, $data);
+                fclose($file);
             }
 //
 //            while (!feof($file)) {
