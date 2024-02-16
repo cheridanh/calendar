@@ -86,22 +86,10 @@ class CalendarController extends Controller
 
             $file = fopen(storage_path('app/calendar'), 'r+');
 
-            function removeLine($file, $remove)
-            {
-                $lines = file(storage_path('app/calendar'), FILE_IGNORE_NEW_LINES);
-                $remove = "BEGIN:VCALENDAR";
-                foreach($lines as $key => $line)
-                    if(stristr($line, $remove)) unset($lines[$key]);
-                $data = implode('\n', array_values($lines));
-                $file = fopen(storage_path('app/calendar'));
-                fwrite($file, $data);
-                fclose($file);
+            while (!feof($file)) {
+                echo fgets($file) . "<br/>";
             }
-//
-//            while (!feof($file)) {
-//                echo fgets($file) . "<br/>";
-//            }
-//            fclose($file);
+            fclose($file);
         }
         // return view('calendars.show', compact('calendar'));
     }
