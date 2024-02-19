@@ -87,7 +87,7 @@ class CalendarController extends Controller
             $file = fopen(storage_path('app/calendar'), 'r+');
 
             while (!feof($file)) {
-                echo fgets($file) . "<br/>";
+                    echo fgets($file) . "</br>";
             }
             fclose($file);
         }
