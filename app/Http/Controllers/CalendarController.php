@@ -6,6 +6,7 @@ use App\Http\Requests\CalendarFormRequest;
 use App\Models\Calendar;
 use App\Models\CalendarLink;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CalendarController extends Controller
 {
@@ -79,20 +80,76 @@ class CalendarController extends Controller
      */
     public function show(Calendar $calendar)
     {
+
+        // Tableau pour stocker tous les événements
+        $allEvents = [];
+
         foreach ($calendar->links as $link) {
-
+            // Récupérer le contenu du lien
             $content = file_get_contents($link->url);
-            Storage::put('calendar', $content);
 
-            $file = fopen(storage_path('app/calendar'), 'r+');
+            // Générer un nom aléatoire pour le fichier .ics
+            $fileName = Str::random(10) . '.ics';
+
+            // Enregistrer le fichier .ics
+            Storage::put($fileName, $content);
+
+            // Lire le contenu du fichier .ics
+            $fileContent = file_get_contents(storage_path('app/'.$fileName));
+
+            // Trouver tous les événements dans le fichier .ics
+            preg_match_all('/BEGIN:VEVENT(.*?)END:VEVENT/s', $fileContent, $events);
+
+            // Ajouter les événements trouvés au tableau des événements
+            $allEvents = array_merge($allEvents, $events[0]);
+        }
+
+        // Concaténer tous les événements dans une chaîne
+        $eventsString = implode("\n", $allEvents);
+
+        // Générer un nom de fichier aléatoire pour tous les évènements récupérés
+        $allEventsWithoutHead = 'all_' . Str::random(10) . '.ics';
+
+        // Enregistrer tous les événements dans un fichier
+        Storage::put($allEventsWithoutHead, $eventsString);
+
+        // Contenu de l'en-tête personnalisé
+        $header = "BEGIN:VCALENDAR\n";
+        $header .= "PRODID:-//Google Inc//Google Calendar 70.9054//EN\n";
+        $header .= "VERSION:2.0\n";
+        $header .= "CALSCALE:GREGORIAN\n";
+        $header .= "METHOD:PUBLISH\n";
+        $header .= "X-WR-CALNAME:CalendrierFusioné\n";
+        $header .= "X-WR-TIMEZONE:Europe/Paris\n";
+        $header .= "X-WR-CALDESC:Nouveau Calendrier\n";
+
+        // Lire le contenu actuel du fichier "all_events.ics"
+        $existingContent = Storage::get($allEventsWithoutHead);
+
+        // Concaténer l'en-tête avec le contenu existant
+        $newContent = $header . $existingContent;
+
+        // Ajouter "END:VCALENDAR" à la fin du contenu
+        $newContent .= "\nEND:VCALENDAR";
+
+        // Générer un nom aléatoire pour le nouveau fichier
+        $newFileName = 'new_' . Str::random(10) . '.ics';
+
+        // Enregistrer le nouveau contenu dans le nouveau fichier
+        Storage::put($newFileName, $newContent);
+
+/*        foreach ($calendar->links as $link) {
+            $content = file_get_contents($link->url);
+            $files = Storage::put(Str::random(10).'.ics', $content);*/
+
+            /*$file = fopen(storage_path('app/*.ics'), 'r+');
 
             while (!feof($file)) {
                     echo fgets($file) . "</br>";
             }
-            fclose($file);
+            fclose($file);*/
         }
         // return view('calendars.show', compact('calendar'));
-    }
 
     /**
      * Show the form for editing the specified resource.
