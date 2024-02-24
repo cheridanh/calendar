@@ -10,22 +10,6 @@ use Illuminate\Support\Str;
 
 class CalendarController extends Controller
 {
-    /*public function home()
-    {
-        return redirect()->route('calendars.index');
-
-        $getNumber = "";
-
-        if(isset($_POST['Commencer'])) {
-            if (!empty($_POST['numberLinks'])) {
-                $getNumber = $_POST['numberLinks'];
-                return redirect()->route('calendars.create', co mpact($getNumber));
-            } else {
-                return redirect()->route('calendars.index');
-            }
-        }
-    }*/
-
     /**
      * Display a listing of the resource.
      *
@@ -69,7 +53,7 @@ class CalendarController extends Controller
 
         flash('Vos '. $calendar->links->count() . ' liens envoyés avec succès !');
 
-            return redirect()->route('calendars.show', $calendar);
+        return redirect()->route('calendars.show', $calendar);
     }
 
     /**
@@ -133,12 +117,15 @@ class CalendarController extends Controller
         $newContent .= "\nEND:VCALENDAR";
 
         // Générer un nom aléatoire pour le nouveau fichier
-        $newFileName = 'new_' . Str::random(10) . '.ics';
+        $newFileName = 'calendrier_' . $calendar->name . '.ics';
 
         // Enregistrer le nouveau contenu dans le nouveau fichier
         Storage::put($newFileName, $newContent);
 
-/*        foreach ($calendar->links as $link) {
+        Storage::download('storage/app/'. $newFileName, $newFileName);
+
+            /*
+            foreach ($calendar->links as $link) {
             $content = file_get_contents($link->url);
             $files = Storage::put(Str::random(10).'.ics', $content);*/
 
@@ -147,11 +134,16 @@ class CalendarController extends Controller
             while (!feof($file)) {
                     echo fgets($file) . "</br>";
             }
-            fclose($file);*/
+            fclose($file);
+            */
+
+        return view('calendars.show', compact('calendar', 'newFileName'));
+
         }
-        // return view('calendars.show', compact('calendar'));
 
     /**
+     *
+     *
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Calendar  $calendar
