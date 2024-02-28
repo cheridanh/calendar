@@ -16,10 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CalendarController::class, 'create']);
 
-/*
- * Route::get('/', function () {
-    return redirect()->route('calendars.index');
-});
-*/
-
-Route::resource('calendars', CalendarController::class);
+Route::resource('calendar', CalendarController::class);

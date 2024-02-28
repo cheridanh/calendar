@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Nouveau   | ' . config('app.name'))
+@section('title', 'Formulaire de création')
 
 @push('stylesheet', '/app.css')
 
 @section('content')
 
-    <form method="POST" action="{{ route('calendars.store') }}">
+    <form method="POST" action="{{ route('calendar.store') }}">
         @csrf
 
         <div class="text-center bg-body-tertiary p-4 rounded">

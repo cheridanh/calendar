@@ -18,7 +18,7 @@ class CalendarController extends Controller
     public function index()
     {
         $calendar = Calendar::all();
-        return view('calendars.index', compact('calendar'));
+        return view('calendar.index', compact('calendar'));
     }
 
     /**
@@ -28,7 +28,7 @@ class CalendarController extends Controller
      */
     public function create()
     {
-        return view('calendars.create');
+        return view('calendar.create');
     }
 
     /**
@@ -53,7 +53,7 @@ class CalendarController extends Controller
 
         flash('Vos '. $calendar->links->count() . ' liens envoyés avec succès !');
 
-        return redirect()->route('calendars.show', $calendar);
+        return view('calendar.store', ['calendar' => $calendar]);
     }
 
     /**
@@ -122,7 +122,8 @@ class CalendarController extends Controller
         // Enregistrer le nouveau contenu dans le nouveau fichier
         Storage::put($newFileName, $newContent);
 
-        Storage::download('storage/app/'. $newFileName, $newFileName);
+        // Télécharger le nouveau fichier avec les êntêtes personnalisées
+        return Storage::download($newFileName, $newFileName);
 
             /*
             foreach ($calendar->links as $link) {
@@ -136,8 +137,6 @@ class CalendarController extends Controller
             }
             fclose($file);
             */
-
-        return view('calendars.show', compact('calendar', 'newFileName'));
 
         }
 

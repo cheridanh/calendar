@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Gestion | ' . config('app.name'))
+@section('title', 'Nouveau Calendrier')
 
 @section('content')
 
@@ -8,10 +8,8 @@
     <hr>
     <div class="m-5">
         <p class="col-lg-8 mx-auto fs-5">
-            Lien du nouveau calendrier :
-        </p>
-        <p>
-
+            Lien du nouveau calendrier : <br>
+            <a href="{{ route('calendar.show', $calendar) }}">babab</a>
         </p>
     </div>
     <p class="col-lg-8 mx-auto fs-5">
@@ -37,7 +35,7 @@
             <i class="bi-arrow-counterclockwise"></i>
         </button>
         <p>
-            <a class="btn btn-lg btn-success rounded-pill" href="{{ route('calendars.edit', $calendar) }}"
+            <a class="btn btn-lg btn-success rounded-pill" href="{{ route('calendar.edit', $calendar) }}"
                role="button">Gérer</a>
         </p>
     </div>
