@@ -95,7 +95,7 @@ class CalendarController extends Controller
         // Générer un nom de fichier aléatoire pour tous les évènements récupérés
         $allEventsWithoutHead = 'all_' . Str::random(10) . '.ics';
 
-        // Storage::put($allEventsWithoutHead, $eventsString);
+        Storage::put($allEventsWithoutHead, $eventsString);
 
         // Contenu de l'en-tête personnalisé
         $header = "BEGIN:VCALENDAR\n";
