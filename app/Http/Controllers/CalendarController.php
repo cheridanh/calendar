@@ -77,10 +77,12 @@ class CalendarController extends Controller
             $fileName = Str::random(10) . '.ics';
 
             // Enregistrer le fichier .ics
-            Storage::put($fileName, $content);
+            file_put_contents($fileName, $content);
+            // Storage::put($fileName, $content);
 
             // Lire le contenu du fichier .ics
-            $fileContent = file_get_contents(storage_path('app/'.$fileName));
+            //  $fileContent = file_get_contents(storage_path('app/'.$fileName));
+            $fileContent = file_get_contents($fileName);
 
             // Trouver tous les événements dans le fichier .ics
             preg_match_all('/BEGIN:VEVENT(.*?)END:VEVENT/s', $fileContent, $events);
@@ -95,7 +97,8 @@ class CalendarController extends Controller
         // Générer un nom de fichier aléatoire pour tous les évènements récupérés
         $allEventsWithoutHead = 'all_' . Str::random(10) . '.ics';
 
-        Storage::put($allEventsWithoutHead, $eventsString);
+        // Storage::put($allEventsWithoutHead, $eventsString);
+        file_put_contents($allEventsWithoutHead, $eventsString);
 
         // Contenu de l'en-tête personnalisé
         $header = "BEGIN:VCALENDAR\n";
@@ -124,7 +127,8 @@ class CalendarController extends Controller
         // Storage::put($newFileName, $newContent);
 
         // Télécharger le nouveau fichier avec l'en-tête personnalisé
-        return Storage::download($newFileName, $newFileName);
+        // return Storage::download($newFileName, $newFileName);
+        return Storage::download(Cache::get($newFileName));
 
             /*
             foreach ($calendar->links as $link) {
