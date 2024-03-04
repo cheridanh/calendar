@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CalendarFormRequest;
 use App\Models\Calendar;
 use App\Models\CalendarLink;
+use Illuminate\Filesystem\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -69,7 +70,7 @@ class CalendarController extends Controller
         $allEvents = [];
 
         foreach ($calendar->links as $link) {
-            // Récupérer le contenu du lien
+            // Récupérer le contenu des liens
             $content = file_get_contents($link->url);
 
             // Générer un nom aléatoire pour le fichier .ics
@@ -94,8 +95,7 @@ class CalendarController extends Controller
         // Générer un nom de fichier aléatoire pour tous les évènements récupérés
         $allEventsWithoutHead = 'all_' . Str::random(10) . '.ics';
 
-        // Enregistrer tous les événements dans un fichier
-        Storage::put($allEventsWithoutHead, $eventsString);
+        // Storage::put($allEventsWithoutHead, $eventsString);
 
         // Contenu de l'en-tête personnalisé
         $header = "BEGIN:VCALENDAR\n";
@@ -120,9 +120,10 @@ class CalendarController extends Controller
         $newFileName = 'calendrier_' . $calendar->name . '.ics';
 
         // Enregistrer le nouveau contenu dans le nouveau fichier
-        Storage::put($newFileName, $newContent);
+        Cache::put($newFileName, $newContent);
+        // Storage::put($newFileName, $newContent);
 
-        // Télécharger le nouveau fichier avec les êntêtes personnalisées
+        // Télécharger le nouveau fichier avec l'en-tête personnalisé
         return Storage::download($newFileName, $newFileName);
 
             /*
