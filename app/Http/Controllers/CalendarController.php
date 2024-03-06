@@ -76,8 +76,8 @@ class CalendarController extends Controller
             // Générer un nom aléatoire pour le fichier .ics
             $fileName = Str::random(10) . '.ics';
 
-            // Enregistrer le fichier .ics
             file_put_contents($fileName, $content);
+            // Enregistrer le fichier .ics
             // Storage::put($fileName, $content);
 
             // Lire le contenu du fichier .ics
@@ -97,8 +97,8 @@ class CalendarController extends Controller
         // Générer un nom de fichier aléatoire pour tous les évènements récupérés
         $allEventsWithoutHead = 'all_' . Str::random(10) . '.ics';
 
-        // Storage::put($allEventsWithoutHead, $eventsString);
         file_put_contents($allEventsWithoutHead, $eventsString);
+        // Storage::put($allEventsWithoutHead, $eventsString);
 
         // Contenu de l'en-tête personnalisé
         $header = "BEGIN:VCALENDAR\n";
@@ -110,8 +110,9 @@ class CalendarController extends Controller
         $header .= "X-WR-TIMEZONE:Europe/Paris\n";
         $header .= "X-WR-CALDESC:Nouveau Calendrier\n";
 
+        $existingContent =file_get_contents($allEventsWithoutHead);
         // Lire le contenu actuel du fichier "all_events.ics"
-        $existingContent = Storage::get($allEventsWithoutHead);
+        // $existingContent = Storage::get($allEventsWithoutHead);
 
         // Concaténer l'en-tête avec le contenu existant
         $newContent = $header . $existingContent;
@@ -122,13 +123,18 @@ class CalendarController extends Controller
         // Générer un nom aléatoire pour le nouveau fichier
         $newFileName = 'calendrier_' . $calendar->name . '.ics';
 
+        $final = file_put_contents($newFileName, $content);
+
+        dd($final);
         // Enregistrer le nouveau contenu dans le nouveau fichier
-        Cache::put($newFileName, $newContent);
         // Storage::put($newFileName, $newContent);
+        cache()->add('calendrier', $final);
+
+        return file_get_contents(cache()->get('calendrier'));
 
         // Télécharger le nouveau fichier avec l'en-tête personnalisé
         // return Storage::download($newFileName, $newFileName);
-        return Storage::download(Cache::get($newFileName));
+        // return Storage::download(Cache::get($newFileName));
 
             /*
             foreach ($calendar->links as $link) {
