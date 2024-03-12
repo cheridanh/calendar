@@ -65,89 +65,36 @@ class CalendarController extends Controller
      */
     public function show(Calendar $calendar)
     {
+        $allItems = cache()->remember('calendrier.' . $calendar->id, 30 * 60, function () use ($calendar) {
 
-        // Tableau pour stocker tous les événements
-        $allEvents = [];
+            // Tableau pour stocker tous les événements
+            // Contenu de l'en-tête personnalisé
+            $allEvents = "BEGIN:VCALENDAR\n";
+            $allEvents .= "PRODID:-//Google Inc//Google Calendar 70.9054//EN\n";
+            $allEvents .= "VERSION:2.0\n";
+            $allEvents .= "CALSCALE:GREGORIAN\n";
+            $allEvents .= "METHOD:PUBLISH\n";
+            $allEvents .= "X-WR-CALNAME:CalendrierFusioné\n";
+            $allEvents .= "X-WR-TIMEZONE:Europe/Paris\n";
+            $allEvents .= "X-WR-CALDESC:Nouveau Calendrier\n";
 
-        foreach ($calendar->links as $link) {
-            // Récupérer le contenu des liens
-            $content = file_get_contents($link->url);
-
-            // Générer un nom aléatoire pour le fichier .ics
-            $fileName = Str::random(10) . '.ics';
-
-            file_put_contents($fileName, $content);
-            // Enregistrer le fichier .ics
-            // Storage::put($fileName, $content);
-
-            // Lire le contenu du fichier .ics
-            //  $fileContent = file_get_contents(storage_path('app/'.$fileName));
-            $fileContent = file_get_contents($fileName);
-
-            // Trouver tous les événements dans le fichier .ics
-            preg_match_all('/BEGIN:VEVENT(.*?)END:VEVENT/s', $fileContent, $events);
-
-            // Ajouter les événements trouvés au tableau des événements
-            $allEvents = array_merge($allEvents, $events[0]);
-        }
-
-        // Concaténer tous les événements dans une chaîne
-        $eventsString = implode("\n", $allEvents);
-
-        // Générer un nom de fichier aléatoire pour tous les évènements récupérés
-        $allEventsWithoutHead = 'all_' . Str::random(10) . '.ics';
-
-        file_put_contents($allEventsWithoutHead, $eventsString);
-        // Storage::put($allEventsWithoutHead, $eventsString);
-
-        // Contenu de l'en-tête personnalisé
-        $header = "BEGIN:VCALENDAR\n";
-        $header .= "PRODID:-//Google Inc//Google Calendar 70.9054//EN\n";
-        $header .= "VERSION:2.0\n";
-        $header .= "CALSCALE:GREGORIAN\n";
-        $header .= "METHOD:PUBLISH\n";
-        $header .= "X-WR-CALNAME:CalendrierFusioné\n";
-        $header .= "X-WR-TIMEZONE:Europe/Paris\n";
-        $header .= "X-WR-CALDESC:Nouveau Calendrier\n";
-
-        $existingContent =file_get_contents($allEventsWithoutHead);
-        // Lire le contenu actuel du fichier "all_events.ics"
-        // $existingContent = Storage::get($allEventsWithoutHead);
-
-        // Concaténer l'en-tête avec le contenu existant
-        $newContent = $header . $existingContent;
-
-        // Ajouter "END:VCALENDAR" à la fin du contenu
-        $newContent .= "\nEND:VCALENDAR";
-
-        // Générer un nom aléatoire pour le nouveau fichier
-        $newFileName = 'calendrier_' . $calendar->name . '.ics';
-
-        $final = file_put_contents($newFileName, $content);
-
-        dd($final);
-        // Enregistrer le nouveau contenu dans le nouveau fichier
-        // Storage::put($newFileName, $newContent);
-        cache()->add('calendrier', $final);
-
-        return file_get_contents(cache()->get('calendrier'));
-
-        // Télécharger le nouveau fichier avec l'en-tête personnalisé
-        // return Storage::download($newFileName, $newFileName);
-        // return Storage::download(Cache::get($newFileName));
-
-            /*
             foreach ($calendar->links as $link) {
-            $content = file_get_contents($link->url);
-            $files = Storage::put(Str::random(10).'.ics', $content);*/
+                // Récupérer le contenu des liens
+                $content = file_get_contents($link->url);
 
-            /*$file = fopen(storage_path('app/*.ics'), 'r+');
+                // Trouver tous les événements dans le fichier .ics
+                preg_match_all('/BEGIN:VEVENT.+END:VEVENT/s', $content, $events);
 
-            while (!feof($file)) {
-                    echo fgets($file) . "</br>";
+                // Ajouter les événements trouvés au tableau des événements
+                $allEvents .= $events[0][0];
             }
-            fclose($file);
-            */
+
+            $allEvents .= "\nEND:VCALENDAR";
+
+            return $allEvents;
+        });
+
+        return $allItems;
 
         }
 
